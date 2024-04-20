@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
 from PyQt5 import QtGui
-from PyQt5.QtGui import QPixmap, QPainter, QColor
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen
+from PyQt5.QtCore import Qt, QPoint, QRect
 import sys
 
 
@@ -28,6 +28,7 @@ class Canvas(QLabel):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
+            self.last_mouse_position = event.pos()
             self.drawing = True
             print("Left click at" + str(event.pos()))
 
@@ -38,13 +39,21 @@ class Canvas(QLabel):
 
     # Drawing function
     def draw(self, points):
-        painter = QPainter()
+        painter = QPainter(self.pixmap)
         pen = QtGui.QPen(Qt.GlobalColor.black, 5)
         painter.setPen(pen)
 
         painter.drawLine(self.last_mouse_position, points)
         self.last_mouse_position = points
         self.update()
+
+    # Paint function
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        target_rect = QRect()
+        target_rect = event.rect()
+        painter.drawPixmap(target_rect, self.pixmap, target_rect)
+        painter.end()
 
 
 class MainWindow(QMainWindow):
