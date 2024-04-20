@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen
 from PyQt5.QtCore import Qt, QPoint, QRect
@@ -6,8 +6,9 @@ import sys
 
 
 class Canvas(QLabel):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
         self.initUI()
 
     def initUI(self):
@@ -17,11 +18,15 @@ class Canvas(QLabel):
         self.setMouseTracking(True)
         self.drawing = False
         self.last_mouse_position = QPoint()
+        self.status_label = QLabel()
 
 
     # Mouse events
     def mouseMoveEvent(self, event):
         mouse_position = event.pos()
+        status_text = f"Mouse coordinates are X: {mouse_position.x()}, Y: {mouse_position.y()}"
+        self.status_label.setText(status_text)
+        self.parent.statusBar.addWidget(self.status_label)
         if(event.buttons() and Qt.MouseButton.LeftButton) and self.drawing:
             self.draw(mouse_position)
         print(mouse_position)
@@ -65,8 +70,10 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(600, 600)
         self.setWindowTitle('Paint App')
 
-        canvas = Canvas()
+        canvas = Canvas(self)
         self.setCentralWidget(canvas)
+        self.statusBar = QStatusBar()
+        self.setStatusBar(self.statusBar)
 
 
 app = QApplication(sys.argv)
