@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
+from PyQt5.QtGui import QPixmap, QPainter, QColor
+from PyQt5.QtCore import Qt, QPoint
 import sys
 
 
@@ -14,19 +15,36 @@ class Canvas(QLabel):
         self.pixmap.fill(Qt.GlobalColor.white)
         self.setPixmap(self.pixmap)
         self.setMouseTracking(True)
+        self.drawing = False
+        self.last_mouse_position = QPoint()
+
 
     # Mouse events
     def mouseMoveEvent(self, event):
         mouse_position = event.pos()
+        if(event.buttons() and Qt.MouseButton.LeftButton) and self.drawing:
+            self.draw(mouse_position)
+        print(mouse_position)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
+            self.drawing = True
             print("Left click at" + str(event.pos()))
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
+            self.drawing = False
             print("Left release at" + str(event.pos()))
 
+    # Drawing function
+    def draw(self, points):
+        painter = QPainter()
+        pen = QtGui.QPen(Qt.GlobalColor.black, 5)
+        painter.setPen(pen)
+
+        painter.drawLine(self.last_mouse_position, points)
+        self.last_mouse_position = points
+        self.update()
 
 
 class MainWindow(QMainWindow):
