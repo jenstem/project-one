@@ -13,6 +13,20 @@ class Canvas(QLabel):
         self.pixmap = QPixmap(600, 600)
         self.pixmap.fill(Qt.GlobalColor.white)
         self.setPixmap(self.pixmap)
+        self.setMouseTracking(True)
+
+    # Mouse events
+    def mouseMoveEvent(self, event):
+        mouse_position = event.pos()
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            print("Left click at" + str(event.pos()))
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            print("Left release at" + str(event.pos()))
+
 
 
 class MainWindow(QMainWindow):
