@@ -122,6 +122,19 @@ class MainWindow(QMainWindow):
         tool_bar.addAction(color_act)
 
 
+        # Menu bar
+        self.new_act = QAction("New", self)
+        self.save_file_act = QAction("Save", self)
+        self.quit_act = QAction("Exit", self)
+
+        self.menuBar().setNativeMenuBar(False)
+
+        file_menu = self.menuBar().addMenu("File")
+        file_menu.addAction(self.new_act)
+        file_menu.addAction(self.save_file_act)
+        file_menu.addSeparator()
+        file_menu.addAction(self.quit_act)
+
 
 app = QApplication(sys.argv)
 window = MainWindow()
