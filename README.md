@@ -75,7 +75,7 @@ Run the app:
 <a id='screenshots'></a>
 ## Screenshots/Gifs:
 
-<img src="https://github.com/jenstem/automated-cv-generator/blob/main/cv-generator.gif" width=1000>
+<img src="https://github.com/jenstem/python-paint-app/blob/main/paint-app.gif" width=1000>
 *This is a GIF of the app*
 
 <a id='contact'></a>
