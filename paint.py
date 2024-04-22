@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar, QToolBar
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen, QAction, QIcon
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar, QToolBar, QColorDialog, QAction
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen, QIcon
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import sys
 
@@ -18,6 +18,9 @@ class Canvas(QLabel):
         self.drawing = False
         self.last_mouse_position = QPoint()
         self.status_label = QLabel()
+        self.eraser = False
+        self.pen_color = Qt.GlobalColor.black
+        self.pen_width = 1
 
 
     # Mouse events
@@ -44,7 +47,7 @@ class Canvas(QLabel):
     # Drawing function
     def draw(self, points):
         painter = QPainter(self.pixmap)
-        pen = QtGui.QPen(Qt.GlobalColor.black, 5)
+        pen = QPen(self.pen_color, self.pen_width)
         painter.setPen(pen)
 
         painter.drawLine(self.last_mouse_position, points)
@@ -58,6 +61,20 @@ class Canvas(QLabel):
         target_rect = event.rect()
         painter.drawPixmap(target_rect, self.pixmap, target_rect)
         painter.end()
+
+
+    # Set pen color
+    def selectTool(self, tool):
+        if tool == "pencil":
+            self.pen_width = 2
+            self.eraser = False
+        elif tool == "marker":
+            self.pen_width = 4
+            self.eraser = False
+        elif tool == "color":
+            self.eraser = False
+            color = QColorDialog.getColor()
+            self.pen_color = color
 
 
 class MainWindow(QMainWindow):
@@ -81,10 +98,14 @@ class MainWindow(QMainWindow):
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, tool_bar)
         tool_bar.setMovable(False)
 
+        # Actions
         pencil_art = QAction(QIcon("icons/pencil.png"), "Pencil", tool_bar)
+        pencil_art.triggered.connect(lambda: canvas.selectTool("pencil"))
         marker_art = QAction(QIcon("icons/marker.png"), "Marker", tool_bar)
+        marker_art.triggered.connect(lambda: canvas.selectTool("marker"))
         eraser_act = QAction(QIcon("icons/eraser.png"), "Eraser", tool_bar)
         color_act = QAction(QIcon("icons/colors.png"), "Colors", tool_bar)
+        color_act.triggered.connect(lambda: canvas.selectTool("color"))
 
         tool_bar.addAction(pencil_art)
         tool_bar.addAction(marker_art)
