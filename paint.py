@@ -85,6 +85,12 @@ class Canvas(QLabel):
             self.pen_color = color
 
 
+    # New canvas
+    def new(self):
+        self.pixmap.fill(Qt.GlobalColor.white)
+        self.update()
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -124,6 +130,7 @@ class MainWindow(QMainWindow):
 
         # Menu bar
         self.new_act = QAction("New", self)
+        self.new_act.triggered.connect(lambda: canvas.new())
         self.save_file_act = QAction("Save", self)
         self.quit_act = QAction("Exit", self)
 
