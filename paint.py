@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar, QToolBar
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen, QAction, QIcon
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import sys
 
@@ -80,6 +80,17 @@ class MainWindow(QMainWindow):
         tool_bar.setIconSize(QSize(24, 24))
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, tool_bar)
         tool_bar.setMovable(False)
+
+        pencil_art = QAction(QIcon("icons/pencil.png"), "Pencil", tool_bar)
+        marker_art = QAction(QIcon("icons/marker.png"), "Marker", tool_bar)
+        eraser_act = QAction(QIcon("icons/eraser.png"), "Eraser", tool_bar)
+        color_act = QAction(QIcon("icons/colors.png"), "Colors", tool_bar)
+
+        tool_bar.addAction(pencil_art)
+        tool_bar.addAction(marker_art)
+        tool_bar.addAction(eraser_act)
+        tool_bar.addAction(color_act)
+
 
 
 app = QApplication(sys.argv)
