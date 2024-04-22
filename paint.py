@@ -1,7 +1,6 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar
-from PyQt5 import QtGui
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar, QToolBar
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen
-from PyQt5.QtCore import Qt, QPoint, QRect
+from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import sys
 
 
@@ -70,10 +69,17 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(600, 600)
         self.setWindowTitle('Paint App')
 
+        # Canvas
         canvas = Canvas(self)
         self.setCentralWidget(canvas)
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
+
+        # Toolbar
+        tool_bar = QToolBar("Toolbar")
+        tool_bar.setIconSize(QSize(24, 24))
+        self.addToolBar(Qt.ToolBarArea.TopToolBarArea, tool_bar)
+        tool_bar.setMovable(False)
 
 
 app = QApplication(sys.argv)
