@@ -47,11 +47,17 @@ class Canvas(QLabel):
     # Drawing function
     def draw(self, points):
         painter = QPainter(self.pixmap)
-        pen = QPen(self.pen_color, self.pen_width)
-        painter.setPen(pen)
+        if self.eraser == False:
+            pen = QPen(self.pen_color, self.pen_width)
+            painter.setPen(pen)
 
-        painter.drawLine(self.last_mouse_position, points)
-        self.last_mouse_position = points
+            painter.drawLine(self.last_mouse_position, points)
+            self.last_mouse_position = points
+
+        elif self.eraser == True:
+            eraser = QRect(points.x(), points.y(), 10, 10)
+            painter.eraseRect(eraser)
+
         self.update()
 
     # Paint function
@@ -63,7 +69,6 @@ class Canvas(QLabel):
         painter.end()
 
 
-    # Set pen color
     def selectTool(self, tool):
         if tool == "pencil":
             self.pen_width = 2
@@ -71,6 +76,9 @@ class Canvas(QLabel):
         elif tool == "marker":
             self.pen_width = 4
             self.eraser = False
+        elif tool == "eraser":
+            self.pen_width = 10
+            self.eraser = True
         elif tool == "color":
             self.eraser = False
             color = QColorDialog.getColor()
@@ -104,6 +112,7 @@ class MainWindow(QMainWindow):
         marker_art = QAction(QIcon("icons/marker.png"), "Marker", tool_bar)
         marker_art.triggered.connect(lambda: canvas.selectTool("marker"))
         eraser_act = QAction(QIcon("icons/eraser.png"), "Eraser", tool_bar)
+        eraser_act.triggered.connect(lambda: canvas.selectTool("eraser"))
         color_act = QAction(QIcon("icons/colors.png"), "Colors", tool_bar)
         color_act.triggered.connect(lambda: canvas.selectTool("color"))
 
