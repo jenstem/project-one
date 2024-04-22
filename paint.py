@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar, QToolBar, QColorDialog, QAction
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QStatusBar, QToolBar, QColorDialog, QAction, QFileDialog
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen, QIcon
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import sys
+import os
 
 
 class Canvas(QLabel):
@@ -91,6 +92,13 @@ class Canvas(QLabel):
         self.update()
 
 
+    # Save canvas
+    def save(self):
+        file_name = QFileDialog.getSaveFileName(self, "Save As", os.path.curdir + "image.png", "PNG File(*.png)")
+        if file_name:
+            self.pixmap.save(file_name, "png")
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -132,6 +140,7 @@ class MainWindow(QMainWindow):
         self.new_act = QAction("New", self)
         self.new_act.triggered.connect(lambda: canvas.new())
         self.save_file_act = QAction("Save", self)
+        self.save_file_act.triggered.connect(lambda: canvas.pixmap.save("image.png"))
         self.quit_act = QAction("Exit", self)
         self.quit_act.triggered.connect(self.close)
 
