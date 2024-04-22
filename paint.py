@@ -133,6 +133,7 @@ class MainWindow(QMainWindow):
         self.new_act.triggered.connect(lambda: canvas.new())
         self.save_file_act = QAction("Save", self)
         self.quit_act = QAction("Exit", self)
+        self.quit_act.triggered.connect(self.close)
 
         self.menuBar().setNativeMenuBar(False)
 
